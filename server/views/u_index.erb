@@ -1,0 +1,51 @@
+<table border="1">
+    <tr>
+        <td>
+            ID
+        </td>
+        
+        <td>
+            URL
+        </td>
+        <td>
+            LAT
+        </td>
+        <td>
+            LON
+        </td>
+        <td>
+            RAD
+        </td>
+       
+
+    </tr>
+    <% @ushahidii.each do |u| %>
+    <tr>
+         <td>
+            <%= u[:uid] %>
+        </td>
+        <td>
+            <%= u[:url] %>
+        </td>
+        <td>
+           <%= u[:lat] %>
+        </td>
+        <td>
+            <%= u[:lon] %>
+        </td>
+        <td>
+            <%= u[:radius] %>
+        </td>
+        <td>
+            <a href="/ushahidi/delete/<%= u[:uid] %>">delete</a>
+        </td>
+        
+       
+
+    </tr>
+    <%end%>
+    
+    
+    
+</table>
+<a href="/ushahidi/new">+ add</a>

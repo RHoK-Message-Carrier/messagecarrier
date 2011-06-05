@@ -18,3 +18,15 @@ migration "create the messages table" do
     timestamp	:timestamp
   end
 end
+
+migration "create the ushahidi table" do
+  database.create_table :ushahidi do
+    int :uid , :primary_key=>true , :autoincrement=>true
+    String		:url
+    String		:lat
+    String		:lon
+    int			:radius
+  end
+end
+
+

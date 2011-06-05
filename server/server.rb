@@ -9,6 +9,7 @@ require 'twiliolib'
 require 'yajl'
 require 'net/smtp'
 require 'twitter'
+require './ushahidi_controller'
 
 API_VERSION = '2010-04-01'
 ACCOUNT_SID = ''
@@ -26,6 +27,8 @@ end
 get "/" do
   erb :index
 end
+
+
 
 get "/edit" do
   erb :edit
