@@ -16,7 +16,7 @@ migration "create the messages table" do
     text		:sendername
 	String		:location
     timestamp	:timestamp
-    int         :personstatus
+    int         :messagestatus
   end
 end
 

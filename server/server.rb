@@ -65,11 +65,11 @@ post "/messages" do
           end
           statuses[msg['messageid']] = :accepted
 
-          if msg['personstatus'].to_i == 0 #A-OK
+          if msg['messagestatus'].to_i == 0 #A-OK
             send_ushahidi(msg);
-          elsif msg['personstatus'].to_i == 1 #HELP
+          elsif msg['messagestatus'].to_i == 1 #HELP
             send_ushahidi(msg);
-          elsif msg['personstatus'].to_i == 2 #Private
+          elsif msg['messagestatus'].to_i == 2 #Private
             #do NOT send to ushahidi!
           else
             #unknown person status
@@ -140,6 +140,9 @@ area experiencing a communications emergency:
 
   #{msg['messagebody']}
 
+THE status is
+    
+    #{msg['messagestatus'].to_i}
 Please don't reply to this email, it will not be delivered.
 END_OF_MESSAGE
 
@@ -157,7 +160,7 @@ END_OF_MESSAGE
   def send_ushahidi(msg)
    latlon = msg['location'].split(',') 
    url_to_use = get_u_servers(latlon)
-   sendStuff = create_sendStuff_msg(msg, msg['personstatus'].to_i)
+   sendStuff = create_sendStuff_msg(msg, msg['messagestatus'].to_i)
    url_to_use.each do |url|
       res = Net::HTTP.post_form(URI.parse(url))
       res["content-type"] = "application/json"
