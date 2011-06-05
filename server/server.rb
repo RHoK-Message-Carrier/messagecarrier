@@ -3,6 +3,7 @@
 require 'sinatra'
 require 'sinatra/reloader' if development?
 require './database'
+require './haversine'
 
 require 'builder'
 require 'twiliolib'
@@ -12,9 +13,9 @@ require 'twitter'
 require './ushahidi_controller'
 
 API_VERSION = '2010-04-01'
-ACCOUNT_SID = ''
-ACCOUNT_TOKEN = ''
-CALLER_ID = ''
+ACCOUNT_SID = 'AC8e8905f38869781042ee40212be175eb'
+ACCOUNT_TOKEN = '2e3211a8848b2220d93e4aa31f89d899'
+CALLER_ID = '+16478384390'
 
 Twitter.configure do |config|
   config.consumer_key = ''
@@ -61,6 +62,17 @@ post "/messages" do
             # TODO: handle unknown message types
           end
           statuses[msg['messageid']] = :accepted
+
+          if msg['personstatus'].to_i == 0 #A-OK
+            send_ushahidi(msg);
+          elsif msg['personstatus'].to_i == 1 #HELP
+            send_ushahidi(msg);
+          elsif msg['personstatus'].to_i == 2 #Private
+            #do NOT send to ushahidi!
+          else
+            #unknown person status
+          end
+
         else
           puts "DB error"
           statuses[msg['messageid']] = :error
@@ -79,6 +91,8 @@ helpers do
   def format_text(msg)
     "Emergency msg: #{msg['messagebody']}"
   end
+
+
   
   def send_sms(msg)
     t = {
@@ -105,8 +119,8 @@ helpers do
     smtp_host   = 'lavabit.com'
     smtp_port   = 25
     smtp_domain = 'lavabit.com'
-    smtp_user   = ''
-    smtp_pwd    = ''
+    smtp_user   = 'messagecarrier2'
+    smtp_pwd    = 'rh0kATL'
     
     subject = "[MessageCarrier] Emergency Message"
     time = Time.now
@@ -137,5 +151,10 @@ END_OF_MESSAGE
     Twitter.update(msg['messagebody'], {"lat" => latlong[0], "long" => latlong[1], "display_coordinates" => "true"})
     #Twitter.update(format_text(msg))
   end
+
+  def send_ushahidi(msg)
+   latlong = msg['location'].split(',') 
+  end
+    
 
 end
