@@ -14,7 +14,7 @@ require 'net/smtp'
 require 'twitter'
 require './ushahidi_controller'
 require './hv'
-require 'ruby-debug/debugger'
+
 
 API_VERSION = '2010-04-01'
 ACCOUNT_SID = 'AC8e8905f38869781042ee40212be175eb'
@@ -162,10 +162,13 @@ END_OF_MESSAGE
    url_to_use = get_u_servers(latlon)
    sendStuff = create_sendStuff_msg(msg, msg['messagestatus'].to_i)
    url_to_use.each do |url|
-      res = Net::HTTP.post_form(URI.parse(url))
-      res["content-type"] = "application/json"
-      res.body = sendStuff.to_json
-      request(res)
+     u = URI.parse(url)
+      req = Net::HTTP.post_form(u )
+      req["content-type"] = "application/json"
+      req.body = sendStuff.to_json
+      response = Net::HTTP.new(u.host, u.port).start {|http| http.request(req) }
+      puts "Response #{response.code} #{response.message}:#{response.body}"
+        
     end
     
    end
@@ -225,4 +228,5 @@ END_OF_MESSAGE
     return urls
   
   end
-  
+
+    
