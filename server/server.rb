@@ -11,9 +11,9 @@ require 'net/smtp'
 require 'twitter'
 
 API_VERSION = '2010-04-01'
-ACCOUNT_SID = ''
-ACCOUNT_TOKEN = ''
-CALLER_ID = ''
+ACCOUNT_SID = 'AC8e8905f38869781042ee40212be175eb'
+ACCOUNT_TOKEN = '2e3211a8848b2220d93e4aa31f89d899'
+CALLER_ID = '+16478384390'
 
 Twitter.configure do |config|
   config.consumer_key = ''
