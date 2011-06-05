@@ -123,4 +123,3 @@ end
 end
 
 
-test_haversine
