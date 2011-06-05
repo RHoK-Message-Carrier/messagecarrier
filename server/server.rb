@@ -157,7 +157,7 @@ END_OF_MESSAGE
   def send_ushahidi(msg)
    latlon = msg['location'].split(',') 
    url_to_use = get_u_servers(latlon)
-   sendStuff = create_sendStuff_msg(msg, foo)
+   sendStuff = create_sendStuff_msg(msg, msg['personstatus'].to_i)
    url_to_use.each do |url|
       res = Net::HTTP.post_form(URI.parse(url))
       res["content-type"] = "application/json"
@@ -172,11 +172,11 @@ END_OF_MESSAGE
     
     foo = case foo_num
       when 1
-        "One"
+        "Hermes Email"
       when 2
-         "Two"
-      when 5
-         "Five"
+         "Hermes Twitter"
+      when 0
+         "Hermes SMS"
       when 6
          "Six"
       else
