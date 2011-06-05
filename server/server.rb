@@ -153,6 +153,26 @@ END_OF_MESSAGE
 
   def send_ushahidi(msg)
    latlong = msg['location'].split(',') 
+   url_to_use = get_u_servers
+   if !url_to_use.nil?
+     #send message
+   end
+  end
+  
+  def get_u_servers
+    DB = Sequel.sqlite('messagecarrier.db')
+    dataset = DB[:ushahidi]
+    dataset.each do |u|
+      lat = u[:lat]
+      lon = u[:lon]
+      #check distance
+      haversine_distance(lat,lon,latlon.first, latlon.last ) 
+      if @distance["km"] < u[:radius]
+        #do the json post
+        return u[:url]
+      end  
+    end
+
   end
     
 
