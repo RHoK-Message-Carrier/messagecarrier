@@ -14,7 +14,7 @@ require 'net/smtp'
 require 'twitter'
 require './ushahidi_controller'
 require './hv'
-require 'ruby-debug/debugger'
+#require 'ruby-debug/debugger'
 
 API_VERSION = '2010-04-01'
 ACCOUNT_SID = 'AC8e8905f38869781042ee40212be175eb'
@@ -162,10 +162,12 @@ END_OF_MESSAGE
    url_to_use = get_u_servers(latlon)
    sendStuff = create_sendStuff_msg(msg, msg['messagestatus'].to_i)
    url_to_use.each do |url|
-      res = Net::HTTP.post_form(URI.parse(url))
-      res["content-type"] = "application/json"
-      res.body = sendStuff.to_json
-      request(res)
+      uri = URI.parse(url)
+      http = Net::HTTP.new(uri.host, uri.port)
+      req = Net::HTTP::Post.new(uri.request_uri)
+      req["content-type"] = "application/json"
+      req.body = sendStuff.to_json
+      http.request(req)
     end
     
    end
@@ -190,6 +192,15 @@ END_OF_MESSAGE
       
       sendStuff = Hash.new
       latlon = msg['location'].split(',')
+      s_name = msg["sendername"]
+      if s_name.index(" ") > 0
+        f_name =  s_name.split(" ")[0]
+        l_name =  s_name.split(" ")[1]
+        
+      else
+        f_name = ""
+        l_name=s_name
+      end
       
       sendStuff={
         :task => "report",
@@ -201,7 +212,9 @@ END_OF_MESSAGE
         :incident_category => 5,  
         :latitude => latlon.first,
         :longitude => latlon.last,
-        :location_name => "report"}
+        :location_name => "report",
+        :person_first => f_name,
+        :person_last => l_name }
       sendStuff
   end
   
@@ -227,8 +240,7 @@ END_OF_MESSAGE
   end
   
 get "/test_sendstuff" do
-  msg = {"location"=>"43.28,-74.24"}
-  #test_data = create_sendStuff_msg(msg, 5)
- # @output = test_data.to_json
-  @output = send_ushahidi(msg)
+  msg = {"location"=>"43.28,-74.24", "sendername"=>"matt kantor"}
+  
+  @output = send_ushahidi(msg).to_s
 end
