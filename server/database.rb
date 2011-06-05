@@ -19,3 +19,15 @@ migration "create the messages table" do
     int         :personstatus
   end
 end
+
+migration "create the ushahidi table" do
+  database.create_table :ushahidi do
+    int :uid , :primary_key=>true , :autoincrement=>true
+    String		:url
+    float	  :lat
+    float 	:lon
+    int			:radius
+  end
+end
+
+

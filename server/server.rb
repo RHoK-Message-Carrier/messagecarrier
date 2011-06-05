@@ -10,6 +10,7 @@ require 'twiliolib'
 require 'yajl'
 require 'net/smtp'
 require 'twitter'
+require './ushahidi_controller'
 
 API_VERSION = '2010-04-01'
 ACCOUNT_SID = 'AC8e8905f38869781042ee40212be175eb'
