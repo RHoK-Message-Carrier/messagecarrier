@@ -4,10 +4,12 @@ require 'sinatra'
 require 'sinatra/reloader' if development?
 require './database'
 
-
+require 'net/http'
 require 'builder'
 require 'twiliolib'
 require 'yajl'
+require "uri"
+require "json"
 require 'net/smtp'
 require 'twitter'
 require './ushahidi_controller'
@@ -154,26 +156,63 @@ END_OF_MESSAGE
   def send_ushahidi(msg)
    latlong = msg['location'].split(',') 
    url_to_use = get_u_servers(latlon)
-   if !url_to_use.nil?
-     #send message
+   sendStuff = create_sendStuff_msg(msg, foo)
+   url_to_use.each do |url|
+      res = Net::HTTP.post_form(URI.parse(url))
+      res["content-type"] = "application/json"
+      res.body = sendStuff.to_json
+      request(res)
+    end
+    
    end
   end
+  
+  def create_sendStuff_msg(msg, foo_num)
+    foo = case foo_num
+      when 1
+        "Something"
+      when 2
+         "Something"
+      when 5
+         "Something"
+      when 6
+         "Something"
+      else
+        "default"
+      
+      end
+      t = Time.now
+     sendStuff = Hash.new
+     sendStuff[:task] = "report"
+     sendStuff[:incident_title] = "#{foo} Emergency Message"
+     sendStuff[:incident_date] = t.mon.to_s + "/" + t.day.to_s + "/" + t.year.to_s
+     sendStuff[:incident_hour] = t.hour
+     sendStuff[:incident_minute] = t.min
+     sendStuff[:incident_ampm] = "report"
+     sendStuff[:incident_category] = 5
+     latlon = msg['location'].split(',')
+     sendStuff[:latitude] = latlon.first
+     sendStuff[:longitude] = latlon.last
+     sendStuff[:location_name] = "report"
+     sendStuff
+  end
+  
+  
   
   def get_u_servers(latlon)
     db = Sequel.sqlite('messagecarrier.db')
     dataset = db[:ushahidi]
+    urls = []
     dataset.each do |u|
       lat = u[:lat]
       lon = u[:lon]
       #check distance
       haversine_distance(lat,lon,  latlon.first, latlon.last ) 
       if @distance["km"] < u[:radius]
-        #do the json post
-        return u[:url]
+        urls << u[:url]
+       
       end  
     end
-    return nil
+    return urls
+  
   end
-    
-
-end
