@@ -12,9 +12,9 @@ require 'net/smtp'
 require 'twitter'
 
 API_VERSION = '2010-04-01'
-ACCOUNT_SID = ''
-ACCOUNT_TOKEN = ''
-CALLER_ID = ''
+ACCOUNT_SID = 'AC8e8905f38869781042ee40212be175eb'
+ACCOUNT_TOKEN = '2e3211a8848b2220d93e4aa31f89d899'
+CALLER_ID = '+16478384390'
 
 Twitter.configure do |config|
   config.consumer_key = ''
@@ -26,6 +26,14 @@ end
 
 get "/" do
   erb :index
+end
+
+get "/edit" do
+  erb :edit
+end
+
+post "/update" do
+  #stuff 
 end
 
 post "/messages" do
@@ -108,8 +116,8 @@ helpers do
     smtp_host   = 'lavabit.com'
     smtp_port   = 25
     smtp_domain = 'lavabit.com'
-    smtp_user   = ''
-    smtp_pwd    = ''
+    smtp_user   = 'messagecarrier2'
+    smtp_pwd    = 'rh0kATL'
     
     subject = "[MessageCarrier] Emergency Message"
     time = Time.now
