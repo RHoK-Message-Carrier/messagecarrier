@@ -216,3 +216,7 @@ END_OF_MESSAGE
     return urls
   
   end
+  
+get "test_sendstuff" do
+    @output = create_sendStuff_msg(Hash.new(:latlon=>'123,456'), 3).to_json
+end
