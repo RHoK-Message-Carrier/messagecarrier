@@ -14,6 +14,7 @@ require 'net/smtp'
 require 'twitter'
 require './ushahidi_controller'
 require './hv'
+require 'ruby-debug/debugger'
 
 API_VERSION = '2010-04-01'
 ACCOUNT_SID = 'AC8e8905f38869781042ee40212be175eb'
@@ -154,7 +155,7 @@ END_OF_MESSAGE
   end
 
   def send_ushahidi(msg)
-   latlong = msg['location'].split(',') 
+   latlon = msg['location'].split(',') 
    url_to_use = get_u_servers(latlon)
    sendStuff = create_sendStuff_msg(msg, foo)
    url_to_use.each do |url|
@@ -168,33 +169,37 @@ END_OF_MESSAGE
   end
   
   def create_sendStuff_msg(msg, foo_num)
+    
     foo = case foo_num
       when 1
-        "Something"
+        "One"
       when 2
-         "Something"
+         "Two"
       when 5
-         "Something"
+         "Five"
       when 6
-         "Something"
+         "Six"
       else
         "default"
       
       end
       t = Time.now
-     sendStuff = Hash.new
-     sendStuff[:task] = "report"
-     sendStuff[:incident_title] = "#{foo} Emergency Message"
-     sendStuff[:incident_date] = t.mon.to_s + "/" + t.day.to_s + "/" + t.year.to_s
-     sendStuff[:incident_hour] = t.hour
-     sendStuff[:incident_minute] = t.min
-     sendStuff[:incident_ampm] = "report"
-     sendStuff[:incident_category] = 5
-     latlon = msg['location'].split(',')
-     sendStuff[:latitude] = latlon.first
-     sendStuff[:longitude] = latlon.last
-     sendStuff[:location_name] = "report"
-     sendStuff
+      
+      sendStuff = Hash.new
+      latlon = msg['location'].split(',')
+      
+      sendStuff={
+        :task => "report",
+        :incident_title => "#{foo} Emergency Message",
+        :incident_date => t.mon.to_s + "/" + t.day.to_s + "/" + t.year.to_s,
+        :incident_hour => t.hour,
+        :incident_minute => t.min,
+        :incident_ampm => "report",
+        :incident_category => 5,  
+        :latitude => latlon.first,
+        :longitude => latlon.last,
+        :location_name => "report"}
+      sendStuff
   end
   
   
@@ -206,10 +211,11 @@ END_OF_MESSAGE
     dataset.each do |u|
       lat = u[:lat]
       lon = u[:lon]
-      #check distance
-      haversine_distance(lat,lon,  latlon.first, latlon.last ) 
-      if @distance["km"] < u[:radius]
-        urls << u[:url]
+      
+      haversine_distance(lat,lon,  latlon.first.to_f, latlon.last.to_f ) 
+       d = @distances["km"]
+       if d < u[:radius]
+         urls << u[:url]
        
       end  
     end
@@ -217,6 +223,9 @@ END_OF_MESSAGE
   
   end
   
-get "test_sendstuff" do
-    @output = create_sendStuff_msg(Hash.new(:latlon=>'123,456'), 3).to_json
+get "/test_sendstuff" do
+  msg = {"location"=>"43.28,-74.24"}
+  #test_data = create_sendStuff_msg(msg, 5)
+ # @output = test_data.to_json
+  @output = send_ushahidi(msg)
 end

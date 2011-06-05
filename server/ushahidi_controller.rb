@@ -1,6 +1,4 @@
-#require 'rubygems'
- #require 'sequel'
- #require 'ruby-debug/debugger'
+
   before '/ushahidi*' do
     DB = Sequel.sqlite('messagecarrier.db')
     dataset = DB[:ushahidi]
