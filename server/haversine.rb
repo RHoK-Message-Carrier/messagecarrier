@@ -56,39 +56,39 @@ the result will be a Hash of distances which are key'd by 'mi','km','ft', and 'm
 def haversine_distance( lat1, lon1, lat2, lon2 )
 
 
-dlon = lon2 - lon1
-dlat = lat2 - lat1
+  dlon = lon2 - lon1
+  dlat = lat2 - lat1
 
 
-dlon_rad = dlon * RAD_PER_DEG
-dlat_rad = dlat * RAD_PER_DEG
+  dlon_rad = dlon * RAD_PER_DEG
+  dlat_rad = dlat * RAD_PER_DEG
 
 
-lat1_rad = lat1 * RAD_PER_DEG
-lon1_rad = lon1 * RAD_PER_DEG
+  lat1_rad = lat1 * RAD_PER_DEG
+  lon1_rad = lon1 * RAD_PER_DEG
 
 
-lat2_rad = lat2 * RAD_PER_DEG
-lon2_rad = lon2 * RAD_PER_DEG
+  lat2_rad = lat2 * RAD_PER_DEG
+  lon2_rad = lon2 * RAD_PER_DEG
 
 
-# puts "dlon: #{dlon}, dlon_rad: #{dlon_rad}, dlat: #{dlat}, dlat_rad: #{dlat_rad}"
+  # puts "dlon: #{dlon}, dlon_rad: #{dlon_rad}, dlat: #{dlat}, dlat_rad: #{dlat_rad}"
 
 
-a = (Math.sin(dlat_rad/2))**2 + Math.cos(lat1_rad) * Math.cos(lat2_rad) * (Math.sin(dlon_rad/2))**2
-c = 2 * Math.atan2( Math.sqrt(a), Math.sqrt(1-a))
+  a = (Math.sin(dlat_rad/2))**2 + Math.cos(lat1_rad) * Math.cos(lat2_rad) * (Math.sin(dlon_rad/2))**2
+  c = 2 * Math.atan2( Math.sqrt(a), Math.sqrt(1-a))
 
 
-dMi = Rmiles * c              # delta between the two points in miles
-dKm = Rkm * c                 # delta in kilometers
-dFeet = Rfeet * c             # delta in feet
-dMeters = Rmeters * c         # delta in meters
+  dMi = Rmiles * c              # delta between the two points in miles
+  dKm = Rkm * c                 # delta in kilometers
+  dFeet = Rfeet * c             # delta in feet
+  dMeters = Rmeters * c         # delta in meters
 
 
-@distances["mi"] = dMi
-@distances["km"] = dKm
-@distances["ft"] = dFeet
-@distances["m"] = dMeters
+  @distances["mi"] = dMi
+  @distances["km"] = dKm
+  @distances["ft"] = dFeet
+  @distances["m"] = dMeters
 end
 
 
