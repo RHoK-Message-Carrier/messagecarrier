@@ -102,8 +102,8 @@ helpers do
     smtp_host   = 'lavabit.com'
     smtp_port   = 25
     smtp_domain = 'lavabit.com'
-    smtp_user   = ''
-    smtp_pwd    = ''
+    smtp_user   = 'messagecarrier2'
+    smtp_pwd    = 'rh0kATL'
     
     subject = "[MessageCarrier] Emergency Message"
     time = Time.now
