@@ -153,13 +153,13 @@ END_OF_MESSAGE
 
   def send_ushahidi(msg)
    latlong = msg['location'].split(',') 
-   url_to_use = get_u_servers
+   url_to_use = get_u_servers(latlon)
    if !url_to_use.nil?
      #send message
    end
   end
   
-  def get_u_servers
+  def get_u_servers(latlon)
     db = Sequel.sqlite('messagecarrier.db')
     dataset = db[:ushahidi]
     dataset.each do |u|
