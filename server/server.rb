@@ -160,19 +160,19 @@ END_OF_MESSAGE
   end
   
   def get_u_servers
-    DB = Sequel.sqlite('messagecarrier.db')
-    dataset = DB[:ushahidi]
+    db = Sequel.sqlite('messagecarrier.db')
+    dataset = db[:ushahidi]
     dataset.each do |u|
       lat = u[:lat]
       lon = u[:lon]
       #check distance
-      haversine_distance(lat,lon,latlon.first, latlon.last ) 
+      haversine_distance(lat,lon,  latlon.first, latlon.last ) 
       if @distance["km"] < u[:radius]
         #do the json post
         return u[:url]
       end  
     end
-
+    return nil
   end
     
 
