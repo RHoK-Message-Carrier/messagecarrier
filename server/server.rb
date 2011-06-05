@@ -238,6 +238,5 @@ END_OF_MESSAGE
   
 get "/test_sendstuff" do
   msg = {"location"=>"43.28,-74.24", "sendername"=>"matt kantor"}
-  
   @output = send_ushahidi(msg).to_s
 end
