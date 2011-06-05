@@ -70,7 +70,7 @@ end
 
 def haversine_distance( lat1, lon1, lat2, lon2 )
   
- 
+  @distances = Hash.new 
 
   dlon = lon2 - lon1
   dlat = lat2 - lat1

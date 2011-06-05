@@ -226,9 +226,3 @@ END_OF_MESSAGE
   
   end
   
-get "/test_sendstuff" do
-  msg = {"location"=>"43.28,-74.24"}
-  #test_data = create_sendStuff_msg(msg, 5)
- # @output = test_data.to_json
-  @output = send_ushahidi(msg)
-end
