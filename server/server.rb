@@ -3,6 +3,7 @@
 require 'sinatra'
 require 'sinatra/reloader' if development?
 require './database'
+require './haversine'
 
 require 'builder'
 require 'twiliolib'
@@ -50,6 +51,17 @@ post "/messages" do
             # TODO: handle unknown message types
           end
           statuses[msg['messageid']] = :accepted
+
+          if msg['personstatus'].to_i == 0 #A-OK
+            send_ushahidi(msg);
+          elsif msg['personstatus'].to_i == 1 #HELP
+            send_ushahidi(msg);
+          elsif msg['personstatus'].to_i == 2 #Private
+            #do NOT send to ushahidi!
+          else
+            #unknown person status
+          end
+
         else
           puts "DB error"
           statuses[msg['messageid']] = :error
@@ -68,6 +80,8 @@ helpers do
   def format_text(msg)
     "Emergency msg: #{msg['messagebody']}"
   end
+
+
   
   def send_sms(msg)
     t = {
@@ -126,5 +140,10 @@ END_OF_MESSAGE
     Twitter.update(msg['messagebody'], {"lat" => latlong[0], "long" => latlong[1], "display_coordinates" => "true"})
     #Twitter.update(format_text(msg))
   end
+
+  def send_ushahidi(msg)
+   latlong = msg['location'].split(',') 
+  end
+    
 
 end
