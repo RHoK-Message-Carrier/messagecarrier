@@ -27,6 +27,14 @@ get "/" do
   erb :index
 end
 
+get "/edit" do
+  erb :edit
+end
+
+post "/update" do
+  #stuff 
+end
+
 post "/messages" do
   content_type :json
   statuses = { }
