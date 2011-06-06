@@ -1,6 +1,6 @@
 # MessageCarrier, Smartphone Message Relay System for Emergency Situations
 
-MessageCarrier is a Random Hacks of Kindess Atlanta and Toronto 2011 Collaberation.
+MessageCarrier is a Random Hacks of Kindess Atlanta and Toronto 2011 Collaboration.
 
 ## Platforms
 - Android
